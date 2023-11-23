@@ -8,6 +8,18 @@ public class Terrain {
     private Case[][] carte;
     private Joueur joueur;
 
+    public int getHauteur() {
+        return hauteur;
+    }
+
+    public int getLargeur() {
+        return largeur;
+    }
+
+    public Case[][] getCarte() {
+        return carte;
+    }
+
     public Terrain(String file) {
         try {
             Scanner sc = new Scanner(new FileInputStream(file));
