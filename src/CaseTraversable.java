@@ -7,25 +7,32 @@ public class CaseTraversable extends Case {
         traversable = true;
     }
 
+    public int getChaleur() {
+        return chaleur;
+    }
+
     @Override
     public Case agauche() {
         if(col != 0)
-           return this(this.lig,this.col-1);
+           return (new CaseTraversable(this.lig, this.col-1));
         else return this;
     }
 
     @Override
     public Case adroite() {
-        return null;
+        return new CaseTraversable(this.lig, this.col + 1);
     }
 
     @Override
     public Case endessous() {
-        return null;
+        return new CaseTraversable(this.lig+1, this.col);
     }
 
     @Override
     public Case audessus() {
-        return null;
+        if (lig > 0) return new CaseTraversable(this.lig - 1, this.col);
+        else return this;
     }
+
+    public boolean estTraversable(){return true;}
 }
