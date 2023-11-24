@@ -1,5 +1,4 @@
 public class Sortie extends CaseTraversable{
-    private int chaleur;
     public Sortie(int lig, int col) {
         super(lig, col);
         traversable = true;

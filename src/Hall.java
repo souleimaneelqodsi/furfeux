@@ -1,5 +1,4 @@
 public class Hall extends CaseTraversable {
-    private int chaleur;
 
     public Hall(int lig, int col, int chaleur) {
         super(lig, col);

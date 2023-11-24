@@ -23,10 +23,11 @@ public class FenetreJeu extends JPanel {
         frame.setVisible(true);
     }
 
+    @Override
     public void paintComponent(Graphics g) {
+
         super.paintComponent(g);
         /* À compléter */    }
-
 
     public void ecranFinal(int n) {
         frame.remove(this);
@@ -38,3 +39,4 @@ public class FenetreJeu extends JPanel {
         frame.repaint();
     }
 }
+
