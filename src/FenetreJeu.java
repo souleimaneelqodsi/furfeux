@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class FenetreJeu extends JPanel implements KeyListener{
+public class FenetreJeu extends JPanel{
     private Terrain terrain;
     private int tailleCase = 36;
     private int hauteur, largeur;
@@ -23,7 +23,7 @@ public class FenetreJeu extends JPanel implements KeyListener{
         frame.pack();
         frame.setVisible(true);
     }
-    public void keyTyped(KeyEvent e) {
+    /*public void keyTyped(KeyEvent e) {
 
     }
     public void keyPressed(KeyEvent e) {
@@ -31,39 +31,50 @@ public class FenetreJeu extends JPanel implements KeyListener{
     }
     public void keyReleased(KeyEvent e) {
 
-    }
+    }*/
 
     @Override
     public void paintComponent(Graphics g) {
-        int rayonCercleJoueur = 25;
-        int tailleCle = 20;
+        int taille = tailleCase/9;
+        super.paintComponent(g);
+        int rayonCercleJoueur = 8;
+        //int tailleCle = 20;
         CaseTraversable caseJ = terrain.getJoueur().getPos();
         int posJX = caseJ.getLig();
         int posJY = caseJ.getCol();
         Case[][] carte = terrain.getCarte();
-        for(int i = 0; i < carte.length; i++){
-            for(int j = 0; j < carte[i].length; j++){
+        /*for(int i = carte.length - 1; i >=0; i--){
+            for(int j = carte[i].length - 1; j >=0; j--){*/
+        for(int i = 0; i < carte.length;i++){
+            for(int j = 0; j < carte[i].length;j++){
                 Case caseActuelle = carte[i][j];
-                if(caseActuelle.equals(caseJ)) g.drawOval(i, j, rayonCercleJoueur, rayonCercleJoueur);
-                else if (Math.pow((posJX - i), 2) + Math.pow((posJY - j), 2) <= 10) {
+                if(caseActuelle.equals(caseJ)) {
+                    g.setColor(Color.gray);
+                    g.fillOval(j+9, i+9, rayonCercleJoueur, rayonCercleJoueur);}
+                else {//if (Math.pow((posJX - j), 2) + Math.pow((posJY - i), 2) <= 10) {
                     if(caseActuelle instanceof Porte) {
                         g.setColor(Color.green);
-                        g.drawRect(i, j, tailleCase, tailleCase);
+                        g.fillRect(j+9, i+9, taille, taille);
                     }
-                    else if(caseActuelle instanceof Sortie) {}
+                    else if(caseActuelle instanceof Sortie) {
+                        g.setColor(Color.green);
+                        g.fillRect(j+9, i+9, taille, taille);
+                    }
+
                     else if(caseActuelle instanceof Mur){
                         g.setColor(Color.black);
-                        g.drawRect(i, j, tailleCase, tailleCase);
+                        g.fillRect(j+9, i+9, taille, taille);
                     }
                     else if(caseActuelle instanceof Hall){
-                        g.setColor(new Color(255-((Hall) caseActuelle).getChaleur()*10, 255, 255));
-                        g.drawRect(i, j, tailleCase, tailleCase);
+                        if(((Hall) caseActuelle).getChaleur() > 0)
+                        g.setColor(new Color(255, 255-100+(((Hall) caseActuelle).getChaleur()*10), 255-100+(((Hall) caseActuelle).getChaleur()*10)));
+                        else g.setColor(Color.white);
+                        g.fillRect(j+9, i+9, taille, taille);
                     }
                 }
             }
         }
-        super.paintComponent(g);
-        /* À compléter */    }
+    }
 
     public void ecranFinal(int n) {
         frame.remove(this);
@@ -74,5 +85,12 @@ public class FenetreJeu extends JPanel implements KeyListener{
         frame.getContentPane().add(label);
         frame.repaint();
     }
+
+    public static void main(String args[]){
+        Terrain t = new Terrain("manoir.txt");
+        FenetreJeu f = new FenetreJeu(t);
+        f.repaint();
+    }
+
 }
 

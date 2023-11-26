@@ -23,25 +23,29 @@ public class CaseTraversable extends Case {
         return traversable;
     }
 
-    @Override
+    /*@Override
     public Case adjacente(Direction d) {
         Case c;
         switch (d) {
 
             case nord -> {
-                c = new CaseTraversable(lig - 1, col); break;
+                if(lig > 0)
+                c = new CaseTraversable(lig - 1, col);
+                else c = this;
             }
             case sud -> {
-                c = new CaseTraversable(lig + 1, col); break;
+                c = new CaseTraversable(lig + 1, col);
             }
             case est -> {
-                c = new CaseTraversable(lig, col + 1); break;
+                c = new CaseTraversable(lig, col + 1);
             }
             case ouest -> {
-                c = new CaseTraversable(lig, col - 1); break;
+                if(col > 0)
+                c = new CaseTraversable(lig, col - 1);
+                else c = this;
             }
             default -> c = this;
         }
         return c;
-    }
+    }*/
 }

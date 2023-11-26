@@ -6,6 +6,6 @@ public abstract class Case {
         }
         public abstract boolean estTraversable();
 
-        public abstract Case adjacente(Direction d);
+        //public abstract Case adjacente(Direction d);
 
 }
