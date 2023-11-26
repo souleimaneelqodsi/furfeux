@@ -6,9 +6,6 @@ public abstract class Case {
         }
         public abstract boolean estTraversable();
 
-        public abstract Case audessus();
-        public abstract Case endessous();
-        public abstract Case agauche();
-        public abstract Case adroite();
+        public abstract Case adjacente(Direction d);
 
 }

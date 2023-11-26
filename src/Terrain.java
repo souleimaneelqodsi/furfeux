@@ -48,7 +48,7 @@ public class Terrain {
                             if (this.joueur != null) throw new IllegalArgumentException("carte avec deux joueurs");
                             cc = new Hall(l, c);
                             this.joueur = new Joueur((CaseTraversable) cc, resistanceJoueur, cles);
-                            ((Hall) cc).entre(joueur);
+                            //((Hall) cc).entre(joueur);
                             break;
                         default:  cc = null; break;
                     }
@@ -64,5 +64,6 @@ public class Terrain {
 
     public ArrayList<CaseTraversable> getVoisinesTraversables(int lig, int col) {
         /* À compléter */
+        return null;
     }
 }

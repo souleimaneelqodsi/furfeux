@@ -11,11 +11,11 @@ public class Furfeux {
     }
 
     public void tour() {
-        /* À compléter */
+        return;
     }
 
     public boolean partieFinie() {
-        /* À compléter */
+       return false;
     }
 
     public static void main(String[] args) {
@@ -30,7 +30,7 @@ public class Furfeux {
                 ((Timer)e.getSource()).stop();
             }
         });
-        timer = new Timer(tempo, e -> );
+        //timer = new Timer(tempo, e -> );
         timer.start();
     }
 }

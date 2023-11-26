@@ -1,7 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
-public class FenetreJeu extends JPanel {
+public class FenetreJeu extends JPanel implements KeyListener{
     private Terrain terrain;
     private int tailleCase = 36;
     private int hauteur, largeur;
@@ -22,10 +23,45 @@ public class FenetreJeu extends JPanel {
         frame.pack();
         frame.setVisible(true);
     }
+    public void keyTyped(KeyEvent e) {
+
+    }
+    public void keyPressed(KeyEvent e) {
+
+    }
+    public void keyReleased(KeyEvent e) {
+
+    }
 
     @Override
     public void paintComponent(Graphics g) {
-
+        int rayonCercleJoueur = 25;
+        int tailleCle = 20;
+        CaseTraversable caseJ = terrain.getJoueur().getPos();
+        int posJX = caseJ.getLig();
+        int posJY = caseJ.getCol();
+        Case[][] carte = terrain.getCarte();
+        for(int i = 0; i < carte.length; i++){
+            for(int j = 0; j < carte[i].length; j++){
+                Case caseActuelle = carte[i][j];
+                if(caseActuelle.equals(caseJ)) g.drawOval(i, j, rayonCercleJoueur, rayonCercleJoueur);
+                else if (Math.pow((posJX - i), 2) + Math.pow((posJY - j), 2) <= 10) {
+                    if(caseActuelle instanceof Porte) {
+                        g.setColor(Color.green);
+                        g.drawRect(i, j, tailleCase, tailleCase);
+                    }
+                    else if(caseActuelle instanceof Sortie) {}
+                    else if(caseActuelle instanceof Mur){
+                        g.setColor(Color.black);
+                        g.drawRect(i, j, tailleCase, tailleCase);
+                    }
+                    else if(caseActuelle instanceof Hall){
+                        g.setColor(new Color(255-((Hall) caseActuelle).getChaleur()*10, 255, 255));
+                        g.drawRect(i, j, tailleCase, tailleCase);
+                    }
+                }
+            }
+        }
         super.paintComponent(g);
         /* À compléter */    }
 

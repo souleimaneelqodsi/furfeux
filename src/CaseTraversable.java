@@ -7,32 +7,41 @@ public class CaseTraversable extends Case {
         traversable = true;
     }
 
+    public int getLig() {
+        return lig;
+    }
+
+    public int getCol() {
+        return col;
+    }
+
     public int getChaleur() {
         return chaleur;
     }
 
-    @Override
-    public Case agauche() {
-        if(col != 0)
-           return (new CaseTraversable(this.lig, this.col-1));
-        else return this;
+    public boolean estTraversable(){
+        return traversable;
     }
 
     @Override
-    public Case adroite() {
-        return new CaseTraversable(this.lig, this.col + 1);
-    }
+    public Case adjacente(Direction d) {
+        Case c;
+        switch (d) {
 
-    @Override
-    public Case endessous() {
-        return new CaseTraversable(this.lig+1, this.col);
+            case nord -> {
+                c = new CaseTraversable(lig - 1, col); break;
+            }
+            case sud -> {
+                c = new CaseTraversable(lig + 1, col); break;
+            }
+            case est -> {
+                c = new CaseTraversable(lig, col + 1); break;
+            }
+            case ouest -> {
+                c = new CaseTraversable(lig, col - 1); break;
+            }
+            default -> c = this;
+        }
+        return c;
     }
-
-    @Override
-    public Case audessus() {
-        if (lig > 0) return new CaseTraversable(this.lig - 1, this.col);
-        else return this;
-    }
-
-    public boolean estTraversable(){return true;}
 }
