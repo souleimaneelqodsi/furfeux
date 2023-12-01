@@ -35,9 +35,8 @@ public class FenetreJeu extends JPanel{
 
     @Override
     public void paintComponent(Graphics g) {
-        int taille = tailleCase/9;
         super.paintComponent(g);
-        int rayonCercleJoueur = 8;
+        int rayonCercleJoueur = tailleCase - 5;
         //int tailleCle = 20;
         CaseTraversable caseJ = terrain.getJoueur().getPos();
         int posJX = caseJ.getLig();
@@ -45,35 +44,33 @@ public class FenetreJeu extends JPanel{
         Case[][] carte = terrain.getCarte();
         /*for(int i = carte.length - 1; i >=0; i--){
             for(int j = carte[i].length - 1; j >=0; j--){*/
-        for(int i = 0; i < carte.length;i++){
-            for(int j = 0; j < carte[i].length;j++){
+        for (int i = 0; i < terrain.getHauteur(); i++) {
+            for (int j = 0; j < terrain.getLargeur(); j++) {
                 Case caseActuelle = carte[i][j];
-                if(caseActuelle.equals(caseJ)) {
+                if (caseActuelle.equals(caseJ)) {
                     g.setColor(Color.gray);
-                    g.fillOval(j+9, i+9, rayonCercleJoueur, rayonCercleJoueur);}
-                else {//if (Math.pow((posJX - j), 2) + Math.pow((posJY - i), 2) <= 10) {
-                    if(caseActuelle instanceof Porte) {
-                        g.setColor(Color.green);
-                        g.fillRect(j+9, i+9, taille, taille);
-                    }
-                    else if(caseActuelle instanceof Sortie) {
-                        g.setColor(Color.green);
-                        g.fillRect(j+9, i+9, taille, taille);
-                    }
-
-                    else if(caseActuelle instanceof Mur){
-                        g.setColor(Color.black);
-                        g.fillRect(j+9, i+9, taille, taille);
-                    }
-                    else if(caseActuelle instanceof Hall){
-                        if(((Hall) caseActuelle).getChaleur() > 0)
-                        g.setColor(new Color(255, 255-100+(((Hall) caseActuelle).getChaleur()*10), 255-100+(((Hall) caseActuelle).getChaleur()*10)));
-                        else g.setColor(Color.white);
-                        g.fillRect(j+9, i+9, taille, taille);
+                    g.fillOval(hauteur/2 +  j * tailleCase, largeur/2 +  i * tailleCase, rayonCercleJoueur, rayonCercleJoueur);
+                } else {
+                    //if (Math.pow((posJX - j * tailleCase), 2) + Math.pow((posJY - i * tailleCase), 2) <= 15) {
+                        if (caseActuelle instanceof Porte) {
+                            g.setColor(Color.green);
+                            g.fillRect(hauteur/2 + j * tailleCase, largeur/2 + i * tailleCase, tailleCase, tailleCase);
+                        } else if (caseActuelle instanceof Sortie) {
+                            g.setColor(Color.green);
+                            g.fillRect(hauteur/2 +  j * tailleCase, largeur/2 +  i * tailleCase, tailleCase, tailleCase);
+                        } else if (caseActuelle instanceof Mur) {
+                            g.setColor(Color.black);
+                            g.fillRect(hauteur/2 +  j * tailleCase, largeur/2 +  i * tailleCase, tailleCase, tailleCase);
+                        } else if (caseActuelle instanceof Hall) {
+                            if (((Hall) caseActuelle).getChaleur() > 0)
+                                g.setColor(new Color(255, 255 - 100 + (((Hall) caseActuelle).getChaleur() * 10), 255 - 100 + (((Hall) caseActuelle).getChaleur() * 10)));
+                            else g.setColor(Color.white);
+                            g.fillRect(hauteur/2 +  j * tailleCase, largeur/2 +  i * tailleCase, tailleCase, tailleCase);
+                        }
                     }
                 }
-            }
-        }
+                }
+            //}
     }
 
     public void ecranFinal(int n) {
