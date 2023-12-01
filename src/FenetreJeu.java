@@ -47,8 +47,8 @@ public class FenetreJeu extends JPanel{
         for (int i = terrain.getHauteur() - 1; i >= 0 ; i--) {
             for (int j = terrain.getLargeur() - 1; j >= 0; j--) {
                 Case caseActuelle = carte[i][j];
-                int width = largeur/2 + j * tailleCase;
-                int height = hauteur/2 + i*tailleCase;
+                int width = largeur/2 * (tailleCase - 10) + j * tailleCase;
+                int height = hauteur/2 * (tailleCase - 10) + i * tailleCase;
                 if (caseActuelle.equals(caseJ)) {
                     g.setColor(Color.gray);
                     g.fillOval(width, height, rayonCercleJoueur, rayonCercleJoueur);
