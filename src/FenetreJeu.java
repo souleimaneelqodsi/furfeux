@@ -44,28 +44,30 @@ public class FenetreJeu extends JPanel{
         Case[][] carte = terrain.getCarte();
         /*for(int i = carte.length - 1; i >=0; i--){
             for(int j = carte[i].length - 1; j >=0; j--){*/
-        for (int i = 0; i < terrain.getHauteur(); i++) {
-            for (int j = 0; j < terrain.getLargeur(); j++) {
+        for (int i = terrain.getHauteur() - 1; i >= 0 ; i--) {
+            for (int j = terrain.getLargeur() - 1; j >= 0; j--) {
                 Case caseActuelle = carte[i][j];
+                int width = largeur/2 + j * tailleCase;
+                int height = hauteur/2 + i*tailleCase;
                 if (caseActuelle.equals(caseJ)) {
                     g.setColor(Color.gray);
-                    g.fillOval(hauteur/2 +  j * tailleCase, largeur/2 +  i * tailleCase, rayonCercleJoueur, rayonCercleJoueur);
+                    g.fillOval(width, height, rayonCercleJoueur, rayonCercleJoueur);
                 } else {
                     //if (Math.pow((posJX - j * tailleCase), 2) + Math.pow((posJY - i * tailleCase), 2) <= 15) {
                         if (caseActuelle instanceof Porte) {
                             g.setColor(Color.green);
-                            g.fillRect(hauteur/2 + j * tailleCase, largeur/2 + i * tailleCase, tailleCase, tailleCase);
+                            g.fillRect(width, height, tailleCase, tailleCase);
                         } else if (caseActuelle instanceof Sortie) {
                             g.setColor(Color.green);
-                            g.fillRect(hauteur/2 +  j * tailleCase, largeur/2 +  i * tailleCase, tailleCase, tailleCase);
+                            g.fillRect(width, height, tailleCase, tailleCase);
                         } else if (caseActuelle instanceof Mur) {
                             g.setColor(Color.black);
-                            g.fillRect(hauteur/2 +  j * tailleCase, largeur/2 +  i * tailleCase, tailleCase, tailleCase);
+                            g.fillRect(width, height, tailleCase, tailleCase);
                         } else if (caseActuelle instanceof Hall) {
                             if (((Hall) caseActuelle).getChaleur() > 0)
                                 g.setColor(new Color(255, 255 - 100 + (((Hall) caseActuelle).getChaleur() * 10), 255 - 100 + (((Hall) caseActuelle).getChaleur() * 10)));
                             else g.setColor(Color.white);
-                            g.fillRect(hauteur/2 +  j * tailleCase, largeur/2 +  i * tailleCase, tailleCase, tailleCase);
+                            g.fillRect(width, height, tailleCase, tailleCase);
                         }
                     }
                 }
