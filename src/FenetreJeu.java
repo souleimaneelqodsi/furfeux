@@ -2,11 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class FenetreJeu extends JPanel{
+public class FenetreJeu extends JPanel implements KeyListener{
     private Terrain terrain;
-    private int tailleCase = 36;
-    private int hauteur, largeur;
-    private JFrame frame;
+    final  private int tailleCase = 36;
+    final private int hauteur, largeur;
+    final private JFrame frame;
 
     public FenetreJeu(Terrain t) {
         this.hauteur = t.getHauteur();
@@ -23,56 +23,83 @@ public class FenetreJeu extends JPanel{
         frame.pack();
         frame.setVisible(true);
     }
-    /*public void keyTyped(KeyEvent e) {
+    public void keyTyped(KeyEvent e) {
 
     }
     public void keyPressed(KeyEvent e) {
 
+
+
+
     }
     public void keyReleased(KeyEvent e) {
-
-    }*/
+        /*int keyCode = e.getKeyCode();
+        switch (keyCode) {
+            case KeyEvent.VK_UP:
+                terrain.getJoueur()..movePlayerUp();
+                break;
+            case KeyEvent.VK_DOWN:
+                gamePanel.movePlayerDown();
+                break;
+            case KeyEvent.VK_LEFT:
+                gamePanel.movePlayerLeft();
+                break;
+            case KeyEvent.VK_RIGHT:
+                gamePanel.movePlayerRight();
+                break;
+        }
+        gamePanel.repaint(); // Rafraîchit l'affichage du panneau de jeu*/
+    }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        int rayonCercleJoueur = tailleCase - 5;
-        //int tailleCle = 20;
+        int rayonCercleJoueur = tailleCase;
+        //int tailleCleLargeur = 20 ;
+        //int tailleCleHauteur = 10 ;
         CaseTraversable caseJ = terrain.getJoueur().getPos();
-        int posJX = caseJ.getLig();
-        int posJY = caseJ.getCol();
+        int posJX = caseJ.getCol() * tailleCase + largeur/2 * (tailleCase - 10);
+        int posJY = caseJ.getLig() * tailleCase + hauteur/2 * (tailleCase - 10) ;
         Case[][] carte = terrain.getCarte();
-        /*for(int i = carte.length - 1; i >=0; i--){
-            for(int j = carte[i].length - 1; j >=0; j--){*/
         for (int i = terrain.getHauteur() - 1; i >= 0 ; i--) {
             for (int j = terrain.getLargeur() - 1; j >= 0; j--) {
                 Case caseActuelle = carte[i][j];
-                int width = largeur/2 * (tailleCase - 10) + j * tailleCase;
-                int height = hauteur/2 * (tailleCase - 10) + i * tailleCase;
+                int X = largeur/2 * (tailleCase - 10) + j * tailleCase;
+                int Y = hauteur/2 * (tailleCase - 10) + i * tailleCase;
                 if (caseActuelle.equals(caseJ)) {
                     g.setColor(Color.gray);
-                    g.fillOval(width, height, rayonCercleJoueur, rayonCercleJoueur);
+                    g.fillOval(X, Y, rayonCercleJoueur, rayonCercleJoueur);
                 } else {
-                    //if (Math.pow((posJX - j * tailleCase), 2) + Math.pow((posJY - i * tailleCase), 2) <= 15) {
+                    /*double calcX = (double) (posJX) - (double) (X);
+                    double calcY = (double) (posJY) - (double) (Y);
+                    double calcX2 = Math.pow(calcX, 2.0);
+                    double calcY2 = Math.pow(calcY, 2.0);
+                    double diagonale = Math.sqrt(2.0) * (double) (tailleCase);
+                    double nbreCases = 20.0;
+                    boolean distEquation = calcX2 + calcY2 <= diagonale * nbreCases;*/
+                    // Math.abs(posJX - j) + Math.abs(posJY - i);
+                    //int distManhattan = Math.abs(caseJ.getCol() - j) + Math.abs(caseJ.getLig() - i);
+                    if(Math.pow(caseJ.getCol() - j, 2) + Math.pow(caseJ.getLig() - i, 2) <= 10* Math.sqrt(2))  {
+                    //if(Math.pow(caseJ.getCol() - j, 2) + Math.pow(caseJ.getLig() - i, 2) <= 10)
                         if (caseActuelle instanceof Porte) {
                             g.setColor(Color.green);
-                            g.fillRect(width, height, tailleCase, tailleCase);
+                            g.fillRect(X, Y, tailleCase, tailleCase);
                         } else if (caseActuelle instanceof Sortie) {
-                            g.setColor(Color.green);
-                            g.fillRect(width, height, tailleCase, tailleCase);
+                            g.setColor(Color.blue);
+                            g.fillRect(X, Y, tailleCase, tailleCase);
                         } else if (caseActuelle instanceof Mur) {
                             g.setColor(Color.black);
-                            g.fillRect(width, height, tailleCase, tailleCase);
+                            g.fillRect(X, Y, tailleCase, tailleCase);
                         } else if (caseActuelle instanceof Hall) {
                             if (((Hall) caseActuelle).getChaleur() > 0)
                                 g.setColor(new Color(255, 255 - 100 + (((Hall) caseActuelle).getChaleur() * 10), 255 - 100 + (((Hall) caseActuelle).getChaleur() * 10)));
                             else g.setColor(Color.white);
-                            g.fillRect(width, height, tailleCase, tailleCase);
+                            g.fillRect(X, Y, tailleCase, tailleCase);
                         }
                     }
+                  }
                 }
-                }
-            //}
+            }
     }
 
     public void ecranFinal(int n) {
@@ -85,11 +112,11 @@ public class FenetreJeu extends JPanel{
         frame.repaint();
     }
 
+    // test:
     public static void main(String args[]){
         Terrain t = new Terrain("manoir.txt");
         FenetreJeu f = new FenetreJeu(t);
         f.repaint();
     }
-
 }
 
