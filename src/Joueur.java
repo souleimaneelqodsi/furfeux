@@ -28,6 +28,6 @@ public class Joueur {
     public void bouge(Case cible) {
         if (cible instanceof CaseTraversable && !(cible instanceof CaseIntraversable))
             c = (CaseTraversable) cible;
-        resistance -= ((CaseTraversable) cible).getChaleur();
+            resistance -= ((CaseTraversable) cible).getChaleur();
     }
 }

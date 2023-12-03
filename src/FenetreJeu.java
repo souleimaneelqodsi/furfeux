@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.security.Key;
 
 public class FenetreJeu extends JPanel implements KeyListener{
     private Terrain terrain;
@@ -22,34 +23,13 @@ public class FenetreJeu extends JPanel implements KeyListener{
         frame.getContentPane().add(this);
         frame.pack();
         frame.setVisible(true);
+
+        this.addKeyListener(this);
+        this.setFocusable(true);
     }
-    public void keyTyped(KeyEvent e) {
-
-    }
-    public void keyPressed(KeyEvent e) {
 
 
 
-
-    }
-    public void keyReleased(KeyEvent e) {
-        /*int keyCode = e.getKeyCode();
-        switch (keyCode) {
-            case KeyEvent.VK_UP:
-                terrain.getJoueur()..movePlayerUp();
-                break;
-            case KeyEvent.VK_DOWN:
-                gamePanel.movePlayerDown();
-                break;
-            case KeyEvent.VK_LEFT:
-                gamePanel.movePlayerLeft();
-                break;
-            case KeyEvent.VK_RIGHT:
-                gamePanel.movePlayerRight();
-                break;
-        }
-        gamePanel.repaint(); // Rafraîchit l'affichage du panneau de jeu*/
-    }
 
     @Override
     public void paintComponent(Graphics g) {
@@ -113,10 +93,60 @@ public class FenetreJeu extends JPanel implements KeyListener{
     }
 
     // test:
-    public static void main(String args[]){
-        Terrain t = new Terrain("manoir.txt");
-        FenetreJeu f = new FenetreJeu(t);
-        f.repaint();
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            Terrain t = new Terrain("manoir.txt");
+            FenetreJeu f = new FenetreJeu(t);
+            f.repaint();
+        });
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    public void keyReleased(KeyEvent e) {
+        int keyCode = e.getKeyCode();
+        switch (keyCode) {
+            case KeyEvent.VK_UP:
+                deplacerJoueur(-1, 0);
+                break;
+            case KeyEvent.VK_DOWN:
+                deplacerJoueur(1, 0);
+                break;
+            case KeyEvent.VK_LEFT:
+                deplacerJoueur(0, -1);
+                break;
+            case KeyEvent.VK_RIGHT:
+                deplacerJoueur(0, 1);
+                break;
+        }
+        frame.repaint(); // Refresh
+    }
+    private void deplacerJoueur(int lig, int col) {
+        CaseTraversable caseActuelle = terrain.getJoueur().getPos();
+
+        // nouvelles coordonnées
+        int newLig = caseActuelle.getLig() + lig;
+        int newCol = caseActuelle.getCol() + col;
+
+        // check limites du terrain
+        if (newLig >= 0 && newLig < hauteur && newCol >= 0 && newCol < largeur) {
+            Case nouvelleCase = terrain.getCarte()[newLig][newCol];
+
+            // Vérification si la nouvelle case est traversable
+            if (nouvelleCase.estTraversable()) {
+                // Déplacement du joueur vers la nouvelle case
+                terrain.getJoueur().bouge(nouvelleCase);
+            }
+        }
     }
 }
 
