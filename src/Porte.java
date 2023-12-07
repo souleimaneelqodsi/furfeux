@@ -22,29 +22,30 @@ public class Porte extends Case {
        ouverte = false;
     }
 
-    /*@Override
+    @Override
     public Case adjacente(Direction d) {
         Case c;
         switch (d) {
-
-            case nord -> {
+            case nord :
                 if(lig > 0)
                     c = new CaseTraversable(lig - 1, col);
                 else c = this;
-            }
-            case sud -> {
+                break;
+            case sud :
                 c = new CaseTraversable(lig + 1, col);
-            }
-            case est -> {
+                break;
+            case est :
                 c = new CaseTraversable(lig, col + 1);
-            }
-            case ouest -> {
+                break;
+            case ouest :
                 if(col > 0)
                     c = new CaseTraversable(lig, col - 1);
                 else c = this;
-            }
-            default -> c = this;
+                break;
+
+            default : c = this; break;
         }
         return c;
-    }*/
+    }
+
 }

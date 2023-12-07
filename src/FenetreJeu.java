@@ -73,7 +73,10 @@ public class FenetreJeu extends JPanel implements KeyListener{
                         } else if (caseActuelle instanceof Hall) {
                             if (((Hall) caseActuelle).getChaleur() > 0)
                                 g.setColor(new Color(255, 255 - 100 + (((Hall) caseActuelle).getChaleur() * 10), 255 - 100 + (((Hall) caseActuelle).getChaleur() * 10)));
-                            else g.setColor(Color.white);
+                            else if (((Hall) caseActuelle).testCle() ) {
+                                g.setColor(Color.gray);
+                                g.fillRect(X + (tailleCase / 2), Y + (tailleCase / 2), 20, 10);
+                            } else g.setColor(Color.white);
                             g.fillRect(X, Y, tailleCase, tailleCase);
                         }
                     }
@@ -116,7 +119,8 @@ public class FenetreJeu extends JPanel implements KeyListener{
         int keyCode = e.getKeyCode();
         switch (keyCode) {
             case KeyEvent.VK_UP:
-                deplacerJoueur(-1, 0);
+                //deplacerJoueur(-1, 0);
+                terrain.getJoueur().bouge(terrain.getJoueur().getPos().adjacente(Direction.nord));
                 break;
             case KeyEvent.VK_DOWN:
                 deplacerJoueur(1, 0);
