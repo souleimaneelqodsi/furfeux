@@ -58,55 +58,54 @@ public class FenetreJeu extends JPanel implements KeyListener{
                 int X = ((largeur / 2) * tailleCase) + (j * tailleCase);
                 int Y = ((hauteur / 2) * tailleCase) + (i * tailleCase);
 
-                if (caseActuelle.equals(caseJ)) {
-                    // Dessiner le joueur
-                    g.setColor(Color.gray);
-                    g.fillOval(X, Y, rayonCercleJoueur, rayonCercleJoueur);
-                } else {
                     // Vérification de la visibilité basée sur la position du joueur
                     // On effectue le calcul de distance sur les indices dans le tableau 2D de Terrain
                     // Ainsi, on considère chaque case comme un carré de taille 1 (car chaque case n'occupe qu'une place dans le tableau 2D)
                     // Donc, diagonale d'une case = √2 * 1 et cercle de cases autour du joueur (rayon) = (x - x')^2 + (y - y')^2 <= N * √2 * 1
                     // où N est le nombre de cases que l'on souhaite donner au joueur comme rayon de visibilité (en l'occurrence 6 semble être adéquat)
-                    if (Math.pow(caseJ.getCol() - j, 2) + Math.pow(caseJ.getLig() - i, 2) <= 6 * Math.sqrt(2)) {
-                        // Traitement des différents types de cases
-                        if (caseActuelle instanceof Porte) {
-                            // Dessiner une porte
-                            if (caseActuelle.estTraversable()) {
-                                g.setColor(Color.black);
-                                g.drawRect(X, Y, tailleCase, tailleCase);
-                            } else {
-                                g.setColor(Color.green);
-                                g.fillRect(X, Y, tailleCase, tailleCase);
-                            }
-                        } else if (caseActuelle instanceof Sortie) {
-                            // Dessiner une sortie
-                            g.setColor(Color.blue);
-                            g.fillRect(X, Y, tailleCase, tailleCase);
-                        } else if (caseActuelle instanceof Mur) {
-                            // Dessiner un mur
+                if (Math.pow(caseJ.getCol() - j, 2) + Math.pow(caseJ.getLig() - i, 2) <= 6 * Math.sqrt(2)) {
+                    // Traitement des différents types de cases
+                    if (caseActuelle instanceof Porte) {
+                        // Dessiner une porte
+                        if (caseActuelle.estTraversable()) {
                             g.setColor(Color.black);
+                            g.drawRect(X, Y, tailleCase, tailleCase);
+                        } else {
+                            g.setColor(Color.green);
                             g.fillRect(X, Y, tailleCase, tailleCase);
-                        } else if (caseActuelle instanceof Hall) {
-                            // Dessiner un hall avec gestion de la chaleur
-                            Hall hallActuel = (Hall) caseActuelle;
-                            if (hallActuel.getChaleur() > 0) {
-                                g.setColor(new Color(255, 255 - (50 + (hallActuel.getChaleur() * 10)), 255 - (50 + (hallActuel.getChaleur() * 10))));
-                            } else {
-                                g.setColor(Color.white);
-                            }
-                            g.fillRect(X, Y, tailleCase, tailleCase);
+                        }
+                    } else if (caseActuelle instanceof Sortie) {
+                        // Dessiner une sortie
+                        g.setColor(Color.blue);
+                        g.fillRect(X, Y, tailleCase, tailleCase);
+                    } else if (caseActuelle instanceof Mur) {
+                        // Dessiner un mur
+                        g.setColor(Color.black);
+                        g.fillRect(X, Y, tailleCase, tailleCase);
+                    } else if (caseActuelle instanceof Hall) {
+                        // Dessiner un hall avec gestion de la chaleur
+                        Hall hallActuel = (Hall) caseActuelle;
+                        if (hallActuel.getChaleur() > 0) {
+                            g.setColor(new Color(255, 255 - (50 + (hallActuel.getChaleur() * 10)), 255 - (50 + (hallActuel.getChaleur() * 10))));
+                        } else {
+                            g.setColor(Color.white);
+                        }
+                        g.fillRect(X, Y, tailleCase, tailleCase);
 
-                            // Dessiner une clé si présente
-                            if (hallActuel.testCle()) {
-                                // centrage de la clé au milieu de la case du Hall
-                                int cleX = X + (tailleCase - tailleCleLargeur) / 2;
-                                int cleY = Y + (tailleCase - tailleCleHauteur) / 2;
-                                g.setColor(Color.gray);
-                                g.fillRect(cleX, cleY, tailleCleLargeur, tailleCleHauteur);
+                        // Dessiner une clé si présente
+                        if (hallActuel.testCle()) {
+                            // centrage de la clé au milieu de la case du Hall
+                            int cleX = X + (tailleCase - tailleCleLargeur) / 2;
+                            int cleY = Y + (tailleCase - tailleCleHauteur) / 2;
+                            g.setColor(Color.gray);
+                            g.fillRect(cleX, cleY, tailleCleLargeur, tailleCleHauteur);
                             }
                         }
                     }
+                    if (caseActuelle.equals(caseJ)) {
+                        // Dessiner le joueur
+                        g.setColor(Color.gray);
+                        g.fillOval(X, Y, rayonCercleJoueur, rayonCercleJoueur);
                 }
             }
         }

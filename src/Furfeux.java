@@ -11,7 +11,8 @@ public class Furfeux {
     }
 
     public void tour() {
-        joueur.baisseResistance(10);
+        // à chaque tour, le joueur perd 10 pts de vie + la chaleur de la case sur laquelle il se trouve
+        joueur.baisseResistance(10 + joueur.getPos().getChaleur());
         //TODO: augmentation de la propagation des flammes
     }
 
