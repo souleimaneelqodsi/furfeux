@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Terrain {
     private int hauteur, largeur;
-    private Case[][] carte;
+    protected Case[][] carte;
     private Joueur joueur;
 
     public int getHauteur() {
@@ -48,7 +48,6 @@ public class Terrain {
                             if (this.joueur != null) throw new IllegalArgumentException("carte avec deux joueurs");
                             cc = new Hall(l, c);
                             this.joueur = new Joueur((CaseTraversable) cc, resistanceJoueur, cles);
-                            //((Hall) cc).entre(joueur);
                             break;
                         default:  cc = null; break;
                     }
@@ -61,6 +60,32 @@ public class Terrain {
     }
 
     public Joueur getJoueur() { return this.joueur; }
+
+    public void deplacerJoueur(Direction d){
+        CaseTraversable caseJ = joueur.getPos();
+        int index, lig, col;
+        lig = caseJ.getLig();
+        col = caseJ.getCol();
+        switch(d){
+            case nord:
+                // 'monter' d'une case revient à monter à la ligne suivante, càd décrémenter l'indice de ligne
+                index = Math.max(0, lig - 1);
+                joueur.bouge(carte[index][col]);
+                break;
+            case sud:
+                index = Math.min(hauteur - 1, lig + 1);
+                joueur.bouge(carte[index][col]);
+                break;
+            case ouest: // aller à l'ouest par raport à une case signifie aller à gauche, ce qui se traduit par une décrémentation de l'indice colonne
+                index = Math.max(0, col - 1);
+                joueur.bouge(carte[lig][index]);
+                break;
+            case est:
+                index = Math.min(largeur - 1, col + 1);
+                joueur.bouge(carte[lig][index]);
+                break;
+        }
+    }
 
     public ArrayList<CaseTraversable> getVoisinesTraversables(int lig, int col) {
         /* À compléter */

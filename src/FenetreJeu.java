@@ -4,6 +4,9 @@ import java.awt.event.*;
 import java.security.Key;
 
 public class FenetreJeu extends JPanel implements KeyListener{
+
+    private JButton pvButton;
+    // ce bouton ci-dessus servira à afficher les points de vie (ou résistance) actuels du joueur
     private Terrain terrain;
     final  private int tailleCase = 36;
     final private int hauteur, largeur;
@@ -14,76 +17,101 @@ public class FenetreJeu extends JPanel implements KeyListener{
         this.largeur = t.getLargeur();
         this.terrain = t;
 
-        setBackground(Color.LIGHT_GRAY);
-        setPreferredSize(new Dimension(9 * tailleCase, 9 * tailleCase));
+        setBackground(Color.WHITE);
+        setPreferredSize(new Dimension(1920, 1080));
 
         JFrame frame = new JFrame("Furfeux");
         this.frame = frame;
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().add(this);
-        frame.pack();
-        frame.setVisible(true);
-
         this.addKeyListener(this);
         this.setFocusable(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().add(this);
+        pvButton = new JButton("PV : " + terrain.getJoueur().getResistance()  + " | Clé(s) : " + terrain.getJoueur().getCles());
+        frame.getContentPane().add(pvButton, BorderLayout.SOUTH);
+        frame.pack();
+        frame.setVisible(true);
+        this.requestFocusInWindow();
     }
 
-
+    void pvJoueur(){
+            pvButton.setText("PV : " + terrain.getJoueur().getResistance() + " | Clé(s) : " + terrain.getJoueur().getCles());
+            frame.repaint();
+    }
 
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+
         int rayonCercleJoueur = tailleCase;
-        //int tailleCleLargeur = 20 ;
-        //int tailleCleHauteur = 10 ;
+        int tailleCleLargeur = 20;
+        int tailleCleHauteur = 10;
         CaseTraversable caseJ = terrain.getJoueur().getPos();
-        int posJX = caseJ.getCol() * tailleCase + largeur/2 * (tailleCase - 10);
-        int posJY = caseJ.getLig() * tailleCase + hauteur/2 * (tailleCase - 10) ;
         Case[][] carte = terrain.getCarte();
-        for (int i = terrain.getHauteur() - 1; i >= 0 ; i--) {
+
+        // L'usage de boucles de décrémentation sert à ne pas afficher le terrain à l'envers
+        for (int i = terrain.getHauteur() - 1; i >= 0; i--) {
             for (int j = terrain.getLargeur() - 1; j >= 0; j--) {
                 Case caseActuelle = carte[i][j];
-                int X = largeur/2 * (tailleCase - 10) + j * tailleCase;
-                int Y = hauteur/2 * (tailleCase - 10) + i * tailleCase;
+                // Mise à l'échelle des indices de case par rapport aux pixels
+                // On essaie de tout centrer en décalant à chaque fois ces derniers de la moitié des dimensions du tableau
+                int X = ((largeur / 2) * tailleCase) + (j * tailleCase);
+                int Y = ((hauteur / 2) * tailleCase) + (i * tailleCase);
+
                 if (caseActuelle.equals(caseJ)) {
+                    // Dessiner le joueur
                     g.setColor(Color.gray);
                     g.fillOval(X, Y, rayonCercleJoueur, rayonCercleJoueur);
                 } else {
-                    /*double calcX = (double) (posJX) - (double) (X);
-                    double calcY = (double) (posJY) - (double) (Y);
-                    double calcX2 = Math.pow(calcX, 2.0);
-                    double calcY2 = Math.pow(calcY, 2.0);
-                    double diagonale = Math.sqrt(2.0) * (double) (tailleCase);
-                    double nbreCases = 20.0;
-                    boolean distEquation = calcX2 + calcY2 <= diagonale * nbreCases;*/
-                    // Math.abs(posJX - j) + Math.abs(posJY - i);
-                    //int distManhattan = Math.abs(caseJ.getCol() - j) + Math.abs(caseJ.getLig() - i);
-                    if(Math.pow(caseJ.getCol() - j, 2) + Math.pow(caseJ.getLig() - i, 2) <= 10* Math.sqrt(2))  {
-                    //if(Math.pow(caseJ.getCol() - j, 2) + Math.pow(caseJ.getLig() - i, 2) <= 10)
+                    // Vérification de la visibilité basée sur la position du joueur
+                    // On effectue le calcul de distance sur les indices dans le tableau 2D de Terrain
+                    // Ainsi, on considère chaque case comme un carré de taille 1 (car chaque case n'occupe qu'une place dans le tableau 2D)
+                    // Donc, diagonale d'une case = √2 * 1 et cercle de cases autour du joueur (rayon) = (x - x')^2 + (y - y')^2 <= N * √2 * 1
+                    // où N est le nombre de cases que l'on souhaite donner au joueur comme rayon de visibilité (en l'occurrence 6 semble être adéquat)
+                    if (Math.pow(caseJ.getCol() - j, 2) + Math.pow(caseJ.getLig() - i, 2) <= 6 * Math.sqrt(2)) {
+                        // Traitement des différents types de cases
                         if (caseActuelle instanceof Porte) {
-                            g.setColor(Color.green);
-                            g.fillRect(X, Y, tailleCase, tailleCase);
+                            // Dessiner une porte
+                            if (caseActuelle.estTraversable()) {
+                                g.setColor(Color.black);
+                                g.drawRect(X, Y, tailleCase, tailleCase);
+                            } else {
+                                g.setColor(Color.green);
+                                g.fillRect(X, Y, tailleCase, tailleCase);
+                            }
                         } else if (caseActuelle instanceof Sortie) {
+                            // Dessiner une sortie
                             g.setColor(Color.blue);
                             g.fillRect(X, Y, tailleCase, tailleCase);
                         } else if (caseActuelle instanceof Mur) {
+                            // Dessiner un mur
                             g.setColor(Color.black);
                             g.fillRect(X, Y, tailleCase, tailleCase);
                         } else if (caseActuelle instanceof Hall) {
-                            if (((Hall) caseActuelle).getChaleur() > 0)
-                                g.setColor(new Color(255, 255 - 100 + (((Hall) caseActuelle).getChaleur() * 10), 255 - 100 + (((Hall) caseActuelle).getChaleur() * 10)));
-                            else if (((Hall) caseActuelle).testCle() ) {
-                                g.setColor(Color.gray);
-                                g.fillRect(X + (tailleCase / 2), Y + (tailleCase / 2), 20, 10);
-                            } else g.setColor(Color.white);
+                            // Dessiner un hall avec gestion de la chaleur
+                            Hall hallActuel = (Hall) caseActuelle;
+                            if (hallActuel.getChaleur() > 0) {
+                                g.setColor(new Color(255, 255 - (50 + (hallActuel.getChaleur() * 10)), 255 - (50 + (hallActuel.getChaleur() * 10))));
+                            } else {
+                                g.setColor(Color.white);
+                            }
                             g.fillRect(X, Y, tailleCase, tailleCase);
+
+                            // Dessiner une clé si présente
+                            if (hallActuel.testCle()) {
+                                // centrage de la clé au milieu de la case du Hall
+                                int cleX = X + (tailleCase - tailleCleLargeur) / 2;
+                                int cleY = Y + (tailleCase - tailleCleHauteur) / 2;
+                                g.setColor(Color.gray);
+                                g.fillRect(cleX, cleY, tailleCleLargeur, tailleCleHauteur);
+                            }
                         }
                     }
-                  }
                 }
             }
+        }
     }
+
 
     public void ecranFinal(int n) {
         frame.remove(this);
@@ -93,16 +121,6 @@ public class FenetreJeu extends JPanel implements KeyListener{
         label.setSize(this.getSize());
         frame.getContentPane().add(label);
         frame.repaint();
-    }
-
-    // test:
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            Terrain t = new Terrain("manoir.txt");
-            FenetreJeu f = new FenetreJeu(t);
-            f.repaint();
-        });
-
     }
 
     @Override
@@ -118,39 +136,23 @@ public class FenetreJeu extends JPanel implements KeyListener{
     public void keyReleased(KeyEvent e) {
         int keyCode = e.getKeyCode();
         switch (keyCode) {
-            case KeyEvent.VK_UP:
-                //deplacerJoueur(-1, 0);
-                terrain.getJoueur().bouge(terrain.getJoueur().getPos().adjacente(Direction.nord));
+            case KeyEvent.VK_UP: case KeyEvent.VK_Z:
+                terrain.deplacerJoueur(Direction.nord);
                 break;
-            case KeyEvent.VK_DOWN:
-                deplacerJoueur(1, 0);
+            case KeyEvent.VK_DOWN: case KeyEvent.VK_S:
+                terrain.deplacerJoueur(Direction.sud);
                 break;
-            case KeyEvent.VK_LEFT:
-                deplacerJoueur(0, -1);
+            case KeyEvent.VK_LEFT: case KeyEvent.VK_Q:
+                terrain.deplacerJoueur(Direction.ouest);
                 break;
-            case KeyEvent.VK_RIGHT:
-                deplacerJoueur(0, 1);
+            case KeyEvent.VK_RIGHT: case KeyEvent.VK_D:
+                terrain.deplacerJoueur(Direction.est);
                 break;
+            default: break;
         }
-        frame.repaint(); // Refresh
+        frame.repaint();
+        pvJoueur();
     }
-    private void deplacerJoueur(int lig, int col) {
-        CaseTraversable caseActuelle = terrain.getJoueur().getPos();
 
-        // nouvelles coordonnées
-        int newLig = caseActuelle.getLig() + lig;
-        int newCol = caseActuelle.getCol() + col;
-
-        // check limites du terrain
-        if (newLig >= 0 && newLig < hauteur && newCol >= 0 && newCol < largeur) {
-            Case nouvelleCase = terrain.getCarte()[newLig][newCol];
-
-            // Vérification si la nouvelle case est traversable
-            if (nouvelleCase.estTraversable()) {
-                // Déplacement du joueur vers la nouvelle case
-                terrain.getJoueur().bouge(nouvelleCase);
-            }
-        }
-    }
 }
 

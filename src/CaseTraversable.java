@@ -5,8 +5,7 @@ public class CaseTraversable extends Case {
     public CaseTraversable(int lig, int col) {
         super(lig, col);
         traversable = true;
-        /* On initialise pas la chaleur ?
-        chaleur = 0; */
+        chaleur = 0;
     }
 
     public int getLig() {
@@ -21,34 +20,7 @@ public class CaseTraversable extends Case {
         return chaleur;
     }
 
-    public boolean estTraversable(){
+    public boolean estTraversable() {
         return traversable;
     }
-
-    @Override
-    public Case adjacente(Direction d) {
-        Case c;
-        switch (d) {
-            case nord :
-                if(lig > 0)
-                    c = new CaseTraversable(lig - 1, col);
-                else c = this;
-                break;
-            case sud :
-                c = new CaseTraversable(lig + 1, col);
-                break;
-            case est :
-                c = new CaseTraversable(lig, col + 1);
-                break;
-            case ouest :
-                if(col > 0)
-                    c = new CaseTraversable(lig, col - 1);
-                else c = this;
-                break;
-
-            default : c = this; break;
-        }
-        return c;
-    }
-
 }

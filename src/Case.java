@@ -5,7 +5,4 @@ public abstract class Case {
             this.col = c;
         }
         public abstract boolean estTraversable();
-
-        public abstract Case adjacente(Direction d);
-
 }
