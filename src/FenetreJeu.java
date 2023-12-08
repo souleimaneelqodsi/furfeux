@@ -5,6 +5,13 @@ import java.security.Key;
 
 public class FenetreJeu extends JPanel implements KeyListener{
 
+    //TODO: propagation des flammes
+    //TODO: rapport (difficultés rencontrées, progression, éléments ratés ou qu'on aurait aimé faire)
+    //TODO: barre de PV
+    //TODO: affichage du score en temps réel
+    //TODO: (menu) recommencer la partie
+    //TODO: créer de nouvelles maps
+
     private JButton pvButton;
     // ce bouton ci-dessus servira à afficher les points de vie (ou résistance) actuels du joueur
     private Terrain terrain;
