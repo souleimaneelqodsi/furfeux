@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Rapport du projet</title>
+</head>
+
+<header>
+    <h1>
+        Rapport du projet
+    </h1>
+</header>
+
+<body>
+
+    <h2>
+        Rapport de progression
+    </h2>
+
+    <ul>
+        <li>
+            <b>Première semaine</b> : nous avons construit la structure du code en
+            modélisant (à la manière vue en amphi) la hiérarchie entre les différentes classes
+            ainsi que leurs attributs et méthodes respectives -> cette étape du code n'était pas très difficile
+            mais demandait un effort de modélisation et de conception.
+        </li>
+        <li>
+            <b>Deuxième et début de troisième semaine</b> : nous avons codé l'intégralité de la fenêtre graphique, cette partie a été longue
+            car difficile et contenant beaucoup d'étapes (déplacement du joueur dans les limites du terrain par exemple) ainsi que d'obstacles différents (par ex : le passage du joueur sur une case
+            dissimulait cette case car ce dernier était dessiné avant celle-ci)
+        </li>
+        <li>
+            <b>Troisième semaine</b>: nous avons implémenté la partie logique du lancement du jeu : tours de jeux, propagation de la chaleur dans les cases, partie finie...
+        </li>
+    </ul>
+
+    <h2>
+        Difficultés rencontrées
+    </h2>
+
+    <ul>
+        <li>
+            <b> Dimensionnement et placement des cases dans FenetreJeu.java </b> : au départ, nous n'avons pas réussi à dimensionner les cases correctement car nous
+            considérions uniquement les coordonnées dans le tableau 2D ``carte`` de Terrain, alors que celui-ci n'est pas à l'échelle de
+            la fenêtre graphique et de ses pixels. De plus, notre terrain était dessiné à l'envers car nous parcourions le tableau carte du terrain dans l'ordre croissant, oubliant que l'axe des ordonnées dans la fenêtre graphique va "de bas en haut".
+            Aussi, nous commencions à dessiner le terrain à partir du coin supérieur gauche de la fenêtre (
+            pixel d'origine [0,0]), ce qui n'affichait pas le terrain de manière centrée.
+            Nous avons donc défini deux variables X et Y, qui prendraient à chaque fois l'indice (i, j) de la case dans le parcours, le mettrait à l'échelle des pixels en multipliant par tailleCase,
+            et en ajoutant terrain.largeur/2 à X et terrain.hauteur/2 à Y, afin de centrer le terrain en s'assurant que les pixels de dessin sont toujours décalés
+        </li>
+        <li>
+            <b>  </b> : Le déplacement du joueur doit vérifier que qu'il n'est pas sorti du terrai
+
+        </li>
+
+    </ul>
+
+</body>
+
+</html>
