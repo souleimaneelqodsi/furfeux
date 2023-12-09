@@ -57,20 +57,20 @@ public class FenetreJeu extends JPanel implements KeyListener{
         Case[][] carte = terrain.getCarte();
 
         // L'usage de boucles de décrémentation sert à ne pas afficher le terrain à l'envers
-        for (int i = terrain.getHauteur() - 1; i >= 0; i--) {
-            for (int j = terrain.getLargeur() - 1; j >= 0; j--) {
-                Case caseActuelle = carte[i][j];
+        for (int lig = terrain.getHauteur() - 1; lig >= 0; lig--) {
+            for (int col = terrain.getLargeur() - 1; col >= 0; col--) {
+                Case caseActuelle = carte[lig][col];
                 // Mise à l'échelle des indices de case par rapport aux pixels
                 // On essaie de tout centrer en décalant à chaque fois ces derniers de la moitié des dimensions du tableau
-                int X = ((largeur / 2) * tailleCase) + (j * tailleCase);
-                int Y = ((hauteur / 2) * tailleCase) + (i * tailleCase);
+                int X = ((largeur / 2) * tailleCase) + (col * tailleCase);
+                int Y = ((hauteur / 2) * tailleCase) + (lig * tailleCase);
 
                     // Vérification de la visibilité basée sur la position du joueur
                     // On effectue le calcul de distance sur les indices dans le tableau 2D de Terrain
                     // Ainsi, on considère chaque case comme un carré de taille 1 (car chaque case n'occupe qu'une place dans le tableau 2D)
                     // Donc, diagonale d'une case = √2 * 1 et cercle de cases autour du joueur (rayon) = (x - x')^2 + (y - y')^2 <= N * √2 * 1
                     // où N est le nombre de cases que l'on souhaite donner au joueur comme rayon de visibilité (en l'occurrence 6 semble être adéquat)
-                if (Math.pow(caseJ.getCol() - j, 2) + Math.pow(caseJ.getLig() - i, 2) <= 6 * Math.sqrt(2)) {
+                if (Math.pow(caseJ.getCol() - col, 2) + Math.pow(caseJ.getLig() - lig, 2) <= 6 * Math.sqrt(2)) {
                     // Traitement des différents types de cases
                     if (caseActuelle instanceof Porte) {
                         // Dessiner une porte

@@ -5,4 +5,6 @@ public abstract class Case {
             this.col = c;
         }
         public abstract boolean estTraversable();
+        public abstract int getLig();
+        public abstract int getCol();
 }

@@ -8,7 +8,8 @@ public class Hall extends CaseTraversable {
     }
     public Hall(int lig, int col, int chaleur) {
         super(lig, col);
-        this.chaleur = chaleur;
+        // chaleur comprise entre 0 et 10 :
+        if(chaleur >= 0 && chaleur <= 10) this.chaleur = chaleur;
         this.contientCle = false;
     }
 
