@@ -111,7 +111,7 @@ public class Terrain {
     public ArrayList<CaseTraversable> getVoisinesTraversables(int lig, int col) {
         ArrayList<CaseTraversable> acc = new ArrayList<>();
         if (!(lig >= hauteur || lig < 0) && !(col >= largeur || col < 0)) {
-            if (carte[lig][col] instanceof CaseTraversable && !(carte[lig][col] instanceof Porte)) {
+            if (carte[lig][col] instanceof CaseTraversable && !(carte[lig][col] instanceof Porte) && !(carte[lig][col] instanceof Sortie)) {
                 CaseTraversable nord = adjacenteTraversable(lig, col, Direction.nord);
                 if (nord != null) acc.add(nord);
                 CaseTraversable sud = adjacenteTraversable(lig, col, Direction.sud);

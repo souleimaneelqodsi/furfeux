@@ -25,7 +25,7 @@ public class Furfeux {
                         chaleur += v.getChaleur();
                     }
                     Random rnd = new Random();
-                    int aleat = rnd.nextInt(199);
+                    int aleat = rnd.nextInt(200);
                     if(aleat < chaleur) ((CaseTraversable) cc).chauffe();
                     else if(aleat > 190)  ((CaseTraversable) cc).refroidit();
                 }

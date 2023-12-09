@@ -18,11 +18,36 @@ public class FenetreJeu extends JPanel implements KeyListener{
     final  private int tailleCase = 36;
     final private int hauteur, largeur;
     final private JFrame frame;
-
+    final private Image imageBrique; // image de Mur
+    final private Image imagePorte; // image de Porte
+    final private Image imageHall; // image de Hall
+    final private Image imageCle;
     public FenetreJeu(Terrain t) {
         this.hauteur = t.getHauteur();
         this.largeur = t.getLargeur();
         this.terrain = t;
+
+        MediaTracker tracker = new MediaTracker(this); //Charger l'image des murs avec un tracker
+        imageBrique = new ImageIcon("C:\\Users\\zakkh\\Desktop\\études\\L2\\IPO\\furfeux\\src\\briques.jpg").getImage();
+        imagePorte = new ImageIcon("C:\\Users\\zakkh\\Desktop\\études\\L2\\IPO\\furfeux\\src\\porte.jpg").getImage();
+        imageHall = new ImageIcon("C:\\Users\\zakkh\\Desktop\\études\\L2\\IPO\\furfeux\\src\\hall.jpg").getImage();
+        imageCle = new ImageIcon("C:\\Users\\zakkh\\Desktop\\études\\L2\\IPO\\furfeux\\src\\cle.jpg").getImage();
+        tracker.addImage(imageBrique, 0);
+
+
+        try {
+            tracker.waitForAll();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // Vérifier si le chargement a réussi
+        if (tracker.isErrorAny()) {
+            System.err.println("Erreur de chargement de l'image de brique.");
+        }
+
+
+
 
         setBackground(Color.WHITE);
         setPreferredSize(new Dimension(1920, 1080));
@@ -76,10 +101,11 @@ public class FenetreJeu extends JPanel implements KeyListener{
                         // Dessiner une porte
                         if (caseActuelle.estTraversable()) {
                             g.setColor(Color.black);
-                            g.drawRect(X, Y, tailleCase, tailleCase);
-                        } else {
-                            g.setColor(Color.green);
                             g.fillRect(X, Y, tailleCase, tailleCase);
+                        } else {
+                            /*g.setColor(Color.green);
+                            g.fillRect(X, Y, tailleCase, tailleCase)*/
+                            g.drawImage(imagePorte, X, Y, tailleCase, tailleCase, this);
                         }
                     } else if (caseActuelle instanceof Sortie) {
                         // Dessiner une sortie
@@ -87,26 +113,30 @@ public class FenetreJeu extends JPanel implements KeyListener{
                         g.fillRect(X, Y, tailleCase, tailleCase);
                     } else if (caseActuelle instanceof Mur) {
                         // Dessiner un mur
-                        g.setColor(Color.black);
-                        g.fillRect(X, Y, tailleCase, tailleCase);
+                        /*g.setColor(Color.black);
+                        g.fillRect(X, Y, tailleCase, tailleCase);*/
+                        g.drawImage(imageHall, X, Y, tailleCase, tailleCase, this);
                     } else if (caseActuelle instanceof Hall) {
                         // Dessiner un hall avec gestion de la chaleur
                         Hall hallActuel = (Hall) caseActuelle;
-                        if (hallActuel.getChaleur() > 0) {
-                            g.setColor(new Color(255, 255 - (50 + (hallActuel.getChaleur() * 10)), 255 - (50 + (hallActuel.getChaleur() * 10))));
-                        } else {
-                            g.setColor(Color.white);
-                        }
-                        g.fillRect(X, Y, tailleCase, tailleCase);
-
                         // Dessiner une clé si présente
                         if (hallActuel.testCle()) {
-                            // centrage de la clé au milieu de la case du Hall
+                            /* centrage de la clé au milieu de la case du Hall
                             int cleX = X + (tailleCase - tailleCleLargeur) / 2;
                             int cleY = Y + (tailleCase - tailleCleHauteur) / 2;
                             g.setColor(Color.gray);
-                            g.fillRect(cleX, cleY, tailleCleLargeur, tailleCleHauteur);
-                            }
+                            g.fillRect(cleX, cleY, tailleCleLargeur, tailleCleHauteur);*/
+                            g.drawImage(imageCle, X, Y, tailleCase, tailleCase, this);
+                        }
+                        if (hallActuel.getChaleur() == 0) {
+                            g.drawImage(imageBrique, X, Y, tailleCase, tailleCase, this);
+                        } else {
+                            g.setColor(new Color(255, 255 - (50 + (hallActuel.getChaleur() * 10)), 255 - (50 + (hallActuel.getChaleur() * 10))));
+                            g.fillRect(X, Y, tailleCase, tailleCase);
+
+                        }
+
+
                         }
                     }
                     if (caseActuelle.equals(caseJ)) {
