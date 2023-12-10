@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.security.Key;
 import java.util.ArrayList;
 
 public class FenetreJeu extends JPanel implements KeyListener{
@@ -19,13 +18,13 @@ public class FenetreJeu extends JPanel implements KeyListener{
     final  private int tailleCase = 36;
     final private int hauteur, largeur;
     final private JFrame frame;
-    final private Image imageBrique; // image de Mur
-    final private Image imagePorteFermee; // image de Porte
-    final private Image imagePorteOuverte;
+    final private Image imageBrique; // image d'un mur
+    final private Image imagePorteFermee; // image de porte fermée
+    final private Image imagePorteOuverte; // image d'une porte ouverte
     final private Image imageHall; // image de Hall
-    final private Image imageCle; // image de Hall contenant clé
-    final private Image imageSortie;
-    final private Image imageJoueur;
+    final private Image imageCle; // image d'une clé
+    final private Image imageSortie; // image d'une sortie
+    final private Image imageJoueur; // image d'un joueur
     final private ArrayList<Image> imagesHallChaleur;
 
     public FenetreJeu(Terrain t) {
@@ -59,6 +58,10 @@ public class FenetreJeu extends JPanel implements KeyListener{
         imageSortie = new ImageIcon("sortie.gif").getImage();
         imagesHallChaleur = new ArrayList<>();
 
+        // on charge les différentes images dans un tableau d'images représentant chacune
+        // un niveau de chaleur différent. On stocke les images aux indices de sorte que les indices plus hauts
+        //contiennent les images de plus forte chaleur
+
         for(int i = 1; i <= 10; i++){
             Image newImg = new ImageIcon(i + ".jpg").getImage();
             imagesHallChaleur.add(newImg);
@@ -84,14 +87,14 @@ public class FenetreJeu extends JPanel implements KeyListener{
         }
     }
 
-    void pvJoueur(){
+    /*void pvJoueur(){
             pvButton.setText("PV : " + terrain.getJoueur().getResistance() + " | Clé(s) : " + terrain.getJoueur().getCles());
             frame.repaint();
-    }
-
+    }*/
 
     @Override
     public void paintComponent(Graphics g) {
+
         super.paintComponent(g);
 
         int tailleCle = 10;
@@ -122,9 +125,9 @@ public class FenetreJeu extends JPanel implements KeyListener{
                     if (caseActuelle instanceof Porte) {
                         // Dessiner une porte
                         if (caseActuelle.estTraversable()) {
-                            g.drawImage(imagePorteFermee, X, Y, tailleCase, tailleCase, this);
-                        } else {
                             g.drawImage(imagePorteOuverte, X, Y, tailleCase, tailleCase, this);
+                        } else {
+                            g.drawImage(imagePorteFermee, X, Y, tailleCase, tailleCase, this);
                         }
                     } else if (caseActuelle instanceof Sortie) {
                         // Dessiner une sortie
@@ -188,7 +191,7 @@ public class FenetreJeu extends JPanel implements KeyListener{
             default: break;
         }
         frame.repaint();
-        pvJoueur();
+        //pvJoueur();
     }
 
 }

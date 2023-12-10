@@ -3,7 +3,7 @@ public class Hall extends CaseTraversable {
 
     public Hall(int lig, int col) {
         super(lig, col);
-        this.chaleur = 0;
+        // pas de clé, à moins qu'on ne le renseigne explicitement
         this.contientCle = false;
     }
     public Hall(int lig, int col, int chaleur) {
@@ -16,9 +16,9 @@ public class Hall extends CaseTraversable {
     public Hall(int lig, int col, boolean contientCle) {
         super(lig, col);
         this.contientCle = contientCle;
-        this.chaleur = 0;
     }
 
+    // getter de contientCle
     public boolean testCle() {
         return contientCle;
     }

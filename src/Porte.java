@@ -6,13 +6,14 @@ public class Porte extends CaseTraversable {
 
    public Porte(int lig, int col) {
        super(lig, col);
+       traversable = false;
    }
    public Porte(int lig, int col, boolean b){
        super(lig, col);
        traversable = b;
    }
-
     public void ouvrir() {
         traversable = true;
     }
+    // pas de méthode fermer() ni de setter car le jeu ne permet pas de fermer une porte déjà ouverte
 }

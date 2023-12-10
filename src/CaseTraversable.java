@@ -4,6 +4,7 @@ public class CaseTraversable extends Case {
 
     public CaseTraversable(int lig, int col) {
         super(lig, col);
+        // par définition, traversable
         traversable = true;
         chaleur = 0;
     }

@@ -25,7 +25,12 @@ public class Furfeux {
                         chaleur += v.getChaleur();
                     }
                     Random rnd = new Random();
+                    // nous avons décidé de baisser l'intervalle de génération du nombre aléatoire donné dans le sujet,
+                    // pour rendre le jeu un peu plus "challengeant" avec une propagation de flammes plus rapide
                     int aleat = rnd.nextInt(180);
+                    // pareil, ci-dessous, nous avons décidé de légèrement dévier des consignes du sujet en considérant aussi l'égalité
+                    // et pas seulement l'infériorité avec le total des chaleurs, pour que les cases aient tendance à chauffer plus fréquemment
+                    // accélérant ainsi la propagation de chaleur
                     if(aleat <= chaleur) ((CaseTraversable) cc).chauffe();
                     else if(aleat > 170)  ((CaseTraversable) cc).refroidit();
                 }
