@@ -5,15 +5,6 @@ import java.util.ArrayList;
 
 public class FenetreJeu extends JPanel implements KeyListener{
 
-    //TODO: rapport : amélioration
-    //TODO: rajouter commentaires méthodes
-    //TODO: barre de PV
-    //TODO: affichage du score en temps réel
-    //TODO: (menu) recommencer la partie et augmenter la difficulté (moins de PV et propagation plus violente du feu)
-    //TODO: rajouter une bande sonore
-
-    private JButton pvButton;
-    // ce bouton ci-dessus servira à afficher les points de vie (ou résistance) actuels du joueur
     private Terrain terrain;
     final  private int tailleCase = 36;
     final private int hauteur, largeur;
@@ -34,7 +25,7 @@ public class FenetreJeu extends JPanel implements KeyListener{
         this.terrain = t;
 
         setBackground(Color.black);
-        setPreferredSize(new Dimension(1920, 1080));
+        setPreferredSize(new Dimension(1000, 500)); // à ajuster au cas où si c'est insuffisant
 
         JFrame frame = new JFrame("Furfeux");
         this.frame = frame;
@@ -42,8 +33,6 @@ public class FenetreJeu extends JPanel implements KeyListener{
         this.setFocusable(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().add(this);
-        pvButton = new JButton("PV : " + terrain.getJoueur().getResistance()  + " | Clé(s) : " + terrain.getJoueur().getCles());
-        frame.getContentPane().add(pvButton, BorderLayout.SOUTH);
         frame.pack();
         frame.setVisible(true);
         this.requestFocusInWindow();
@@ -87,11 +76,6 @@ public class FenetreJeu extends JPanel implements KeyListener{
         }
     }
 
-    /*void pvJoueur(){
-            pvButton.setText("PV : " + terrain.getJoueur().getResistance() + " | Clé(s) : " + terrain.getJoueur().getCles());
-            frame.repaint();
-    }*/
-
     @Override
     public void paintComponent(Graphics g) {
 
@@ -107,10 +91,10 @@ public class FenetreJeu extends JPanel implements KeyListener{
                 Case caseActuelle = carte[lig][col];
 
                 // Mise à l'échelle des indices de case par rapport aux pixels
-                // On essaie de tout centrer en décalant à chaque fois ces derniers de la moitié des dimensions du tableau
+                // On essaie de "détacher" le tout du coin supérieur gauche de la fenêtre en ajoutant un cinquième des dimensions du terrain à chaque coordonnée
 
-                int X = ((largeur / 3) * tailleCase) + (col * tailleCase);
-                int Y = ((hauteur / 3) * tailleCase) + (lig * tailleCase);
+                int X = ((largeur / 5) * tailleCase) + (col * tailleCase);
+                int Y = ((hauteur / 5) * tailleCase) + (lig * tailleCase);
 
                     /*
                     Vérification de la visibilité basée sur la position du joueur
@@ -191,7 +175,6 @@ public class FenetreJeu extends JPanel implements KeyListener{
             default: break;
         }
         frame.repaint();
-        //pvJoueur();
     }
 
 }

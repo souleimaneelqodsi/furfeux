@@ -1,9 +1,9 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.HashSet;
 import java.util.Scanner;
-import java.util.Set;
 
 public class Terrain {
     private int hauteur, largeur;
