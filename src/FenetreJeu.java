@@ -16,7 +16,8 @@ public class FenetreJeu extends JPanel implements KeyListener{
     final private Image imageCle; // image d'une clé
     final private Image imageSortie; // image d'une sortie
     final private Image imageJoueur; // image d'un joueur
-    final private ArrayList<Image> imagesHallChaleur;
+    final private ArrayList<Image> imagesHallChaleur; // images des halls chauffants
+    final private ArrayList<Image> imagesCoeur; // images du coeur/demi-coeur/coeur mort
 
     public FenetreJeu(Terrain t) {
 
@@ -25,7 +26,7 @@ public class FenetreJeu extends JPanel implements KeyListener{
         this.terrain = t;
 
         setBackground(Color.black);
-        setPreferredSize(new Dimension(1000, 500)); // à ajuster au cas où si c'est insuffisant
+        setPreferredSize(new Dimension(1000, 800)); // à ajuster au cas où si c'est insuffisant
 
         JFrame frame = new JFrame("Furfeux");
         this.frame = frame;
@@ -56,6 +57,11 @@ public class FenetreJeu extends JPanel implements KeyListener{
             imagesHallChaleur.add(newImg);
             tracker.addImage(newImg, i + 6);
         }
+
+        imagesCoeur = new ArrayList<>();
+        imagesCoeur.add(new ImageIcon("coeur.png").getImage());
+        imagesCoeur.add(new ImageIcon("demicoeur.png").getImage());
+        imagesCoeur.add(new ImageIcon("coeurmort.png").getImage());
 
         tracker.addImage(imageBrique, 0);
         tracker.addImage(imagePorteFermee, 1);
@@ -121,22 +127,57 @@ public class FenetreJeu extends JPanel implements KeyListener{
                         g.drawImage(imageBrique, X, Y, tailleCase, tailleCase, this);
                     } else if (caseActuelle instanceof Hall) {
                         Hall hallActuel = (Hall) caseActuelle;
-                            int cleX = X + (tailleCase - tailleCle) / 2;
-                            int cleY = Y + (tailleCase - tailleCle) / 2;
-                            for(int i = 1; i <= 10 ; i++){
-                                if (hallActuel.getChaleur() == i) {
-                                    g.drawImage(imagesHallChaleur.get(i-1), X, Y, tailleCase, tailleCase, this);
-                                }
+                        int cleX = X + (tailleCase - tailleCle) / 2;
+                        int cleY = Y + (tailleCase - tailleCle) / 2;
+                        for (int i = 1; i <= 10; i++) {
+                            if (hallActuel.getChaleur() == i) {
+                                g.drawImage(imagesHallChaleur.get(i - 1), X, Y, tailleCase, tailleCase, this);
                             }
-                            if(hallActuel.getChaleur() == 0) g.drawImage(imageHall, X, Y, tailleCase, tailleCase, this);
-                            if(hallActuel.testCle()) g.drawImage(imageCle, cleX, cleY, tailleCle, tailleCle, this);
                         }
+                        if (hallActuel.getChaleur() == 0) g.drawImage(imageHall, X, Y, tailleCase, tailleCase, this);
+                        if (hallActuel.testCle()) g.drawImage(imageCle, cleX, cleY, tailleCle, tailleCle, this);
                     }
-                    if (caseActuelle.equals(caseJ)) {
-                        // Dessiner le joueur
-                        g.drawImage(imageJoueur, X, Y, tailleCase, tailleCase, this);
+                }
+                if (caseActuelle.equals(caseJ)) {
+                    // Dessiner le joueur
+                    g.drawImage(imageJoueur, X, Y, tailleCase, tailleCase, this);
                 }
             }
+        }
+        // Affichage des coeurs
+        int nbCoeurs = 5; // Nombre total de coeurs
+        int pvJoueur = terrain.getJoueur().getResistance(); // PV du joueur
+        int tailleCoeur = 40; // Taille d'un coeur
+        Image imageCoeurPlein = this.imagesCoeur.get(0);
+        Image imageDemiCoeur = this.imagesCoeur.get(1);
+        Image imageCoeurVide = this.imagesCoeur.get(2);
+        int startX = (getWidth() - (nbCoeurs * tailleCoeur)) / 2; // Position X de départ pour centrer les coeurs
+        int Y = (terrain.getCarte()[0][terrain.getCarte()[0].length/2].getCol()*tailleCase) + 100;
+
+        int pvParCoeur = 100; // Points de vie représentés par un cœur plein
+        int nbCoeursPleins = pvJoueur / pvParCoeur;
+        // booléen demi-coeur atteint
+        boolean aDemiCoeur = pvJoueur % pvParCoeur != 0;
+
+        for (int i = 0; i < nbCoeurs; i++) {
+            Image imageCoeur;
+            if (i < nbCoeursPleins) {
+                imageCoeur = imageCoeurPlein;
+            } else if (i == nbCoeursPleins && aDemiCoeur) {
+                imageCoeur = imageDemiCoeur;
+            } else {
+                imageCoeur = imageCoeurVide;
+            }
+            g.drawImage(imageCoeur, startX + i * tailleCoeur, Y, tailleCoeur, tailleCoeur, this);
+        }
+
+        // Affichage des clés
+        int nbCles = terrain.getJoueur().getCles(); // Nombre de clés du joueur
+        int tCle = 20; // Taille d'une clé
+        int startXCles = startX + nbCoeurs * tailleCoeur + 10; // Position X de départ pour les clés (après les coeurs)
+
+        for (int i = 0; i < nbCles; i++) {
+            g.drawImage(imageCle, startXCles + i * tCle, Y, tCle, tCle+10, this);
         }
     }
 
