@@ -2,15 +2,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.security.Key;
+import java.util.ArrayList;
 
 public class FenetreJeu extends JPanel implements KeyListener{
 
-    //TODO: propagation des flammes
-    //TODO: rapport (difficultés rencontrées, progression, éléments ratés ou qu'on aurait aimé faire)
+    //TODO: rapport : amélioration
+    //TODO: rajouter commentaires méthodes
     //TODO: barre de PV
     //TODO: affichage du score en temps réel
-    //TODO: (menu) recommencer la partie
-    //TODO: créer de nouvelles maps
+    //TODO: (menu) recommencer la partie et augmenter la difficulté (moins de PV et propagation plus violente du feu)
+    //TODO: rajouter une bande sonore
 
     private JButton pvButton;
     // ce bouton ci-dessus servira à afficher les points de vie (ou résistance) actuels du joueur
@@ -19,37 +20,21 @@ public class FenetreJeu extends JPanel implements KeyListener{
     final private int hauteur, largeur;
     final private JFrame frame;
     final private Image imageBrique; // image de Mur
-    final private Image imagePorte; // image de Porte
+    final private Image imagePorteFermee; // image de Porte
+    final private Image imagePorteOuverte;
     final private Image imageHall; // image de Hall
-    final private Image imageCle;
+    final private Image imageCle; // image de Hall contenant clé
+    final private Image imageSortie;
+    final private Image imageJoueur;
+    final private ArrayList<Image> imagesHallChaleur;
+
     public FenetreJeu(Terrain t) {
+
         this.hauteur = t.getHauteur();
         this.largeur = t.getLargeur();
         this.terrain = t;
 
-        MediaTracker tracker = new MediaTracker(this); //Charger l'image des murs avec un tracker
-        imageBrique = new ImageIcon("C:\\Users\\zakkh\\Desktop\\études\\L2\\IPO\\furfeux\\src\\briques.jpg").getImage();
-        imagePorte = new ImageIcon("C:\\Users\\zakkh\\Desktop\\études\\L2\\IPO\\furfeux\\src\\porte.jpg").getImage();
-        imageHall = new ImageIcon("C:\\Users\\zakkh\\Desktop\\études\\L2\\IPO\\furfeux\\src\\hall.jpg").getImage();
-        imageCle = new ImageIcon("C:\\Users\\zakkh\\Desktop\\études\\L2\\IPO\\furfeux\\src\\cle.jpg").getImage();
-        tracker.addImage(imageBrique, 0);
-
-
-        try {
-            tracker.waitForAll();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        // Vérifier si le chargement a réussi
-        if (tracker.isErrorAny()) {
-            System.err.println("Erreur de chargement de l'image de brique.");
-        }
-
-
-
-
-        setBackground(Color.WHITE);
+        setBackground(Color.black);
         setPreferredSize(new Dimension(1920, 1080));
 
         JFrame frame = new JFrame("Furfeux");
@@ -63,6 +48,40 @@ public class FenetreJeu extends JPanel implements KeyListener{
         frame.pack();
         frame.setVisible(true);
         this.requestFocusInWindow();
+
+        MediaTracker tracker = new MediaTracker(this); //priorise l'affichage des images au paintComponent
+        imageBrique = new ImageIcon("brique.png").getImage();
+        imagePorteFermee = new ImageIcon("porte_fermee.png").getImage();
+        imagePorteOuverte = new ImageIcon("porte_ouverte.png").getImage();
+        imageHall = new ImageIcon("hall.jpg").getImage();
+        imageCle = new ImageIcon("cle.png").getImage();
+        imageJoueur = new ImageIcon("perso.png").getImage();
+        imageSortie = new ImageIcon("sortie.gif").getImage();
+        imagesHallChaleur = new ArrayList<>();
+
+        for(int i = 1; i <= 10; i++){
+            Image newImg = new ImageIcon(i + ".jpg").getImage();
+            imagesHallChaleur.add(newImg);
+            tracker.addImage(newImg, i + 6);
+        }
+
+        tracker.addImage(imageBrique, 0);
+        tracker.addImage(imagePorteFermee, 1);
+        tracker.addImage(imageHall, 2);
+        tracker.addImage(imageCle, 3);
+        tracker.addImage(imageJoueur, 4);
+        tracker.addImage(imageSortie, 5);
+        tracker.addImage(imagePorteOuverte, 6);
+
+        try {
+            tracker.waitForAll();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+       if (tracker.isErrorAny()) {
+            System.err.println("Erreur de chargement d'une ou plusieurs images.");
+        }
     }
 
     void pvJoueur(){
@@ -75,9 +94,7 @@ public class FenetreJeu extends JPanel implements KeyListener{
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        int rayonCercleJoueur = tailleCase;
-        int tailleCleLargeur = 20;
-        int tailleCleHauteur = 10;
+        int tailleCle = 10;
         CaseTraversable caseJ = terrain.getJoueur().getPos();
         Case[][] carte = terrain.getCarte();
 
@@ -85,69 +102,56 @@ public class FenetreJeu extends JPanel implements KeyListener{
         for (int lig = terrain.getHauteur() - 1; lig >= 0; lig--) {
             for (int col = terrain.getLargeur() - 1; col >= 0; col--) {
                 Case caseActuelle = carte[lig][col];
+
                 // Mise à l'échelle des indices de case par rapport aux pixels
                 // On essaie de tout centrer en décalant à chaque fois ces derniers de la moitié des dimensions du tableau
-                int X = ((largeur / 2) * tailleCase) + (col * tailleCase);
-                int Y = ((hauteur / 2) * tailleCase) + (lig * tailleCase);
 
-                    // Vérification de la visibilité basée sur la position du joueur
-                    // On effectue le calcul de distance sur les indices dans le tableau 2D de Terrain
-                    // Ainsi, on considère chaque case comme un carré de taille 1 (car chaque case n'occupe qu'une place dans le tableau 2D)
-                    // Donc, diagonale d'une case = √2 * 1 et cercle de cases autour du joueur (rayon) = (x - x')^2 + (y - y')^2 <= N * √2 * 1
-                    // où N est le nombre de cases que l'on souhaite donner au joueur comme rayon de visibilité (en l'occurrence 6 semble être adéquat)
+                int X = ((largeur / 3) * tailleCase) + (col * tailleCase);
+                int Y = ((hauteur / 3) * tailleCase) + (lig * tailleCase);
+
+                    /*
+                    Vérification de la visibilité basée sur la position du joueur
+                    On effectue le calcul de distance sur les indices dans le tableau 2D de Terrain
+                    Ainsi, on considère chaque case comme un carré de taille 1 (car chaque case n'occupe qu'une place dans le tableau 2D)
+                    Donc, diagonale d'une case = √2 * 1 et cercle de cases autour du joueur (rayon) = (x - x')^2 + (y - y')^2 <= N * √2 * 1
+                    où N est le nombre de cases que l'on souhaite donner au joueur comme rayon de visibilité (en l'occurrence 6 semble être adéquat)
+                    */
+
                 if (Math.pow(caseJ.getCol() - col, 2) + Math.pow(caseJ.getLig() - lig, 2) <= 6 * Math.sqrt(2)) {
                     // Traitement des différents types de cases
                     if (caseActuelle instanceof Porte) {
                         // Dessiner une porte
                         if (caseActuelle.estTraversable()) {
-                            g.setColor(Color.black);
-                            g.fillRect(X, Y, tailleCase, tailleCase);
+                            g.drawImage(imagePorteFermee, X, Y, tailleCase, tailleCase, this);
                         } else {
-                            /*g.setColor(Color.green);
-                            g.fillRect(X, Y, tailleCase, tailleCase)*/
-                            g.drawImage(imagePorte, X, Y, tailleCase, tailleCase, this);
+                            g.drawImage(imagePorteOuverte, X, Y, tailleCase, tailleCase, this);
                         }
                     } else if (caseActuelle instanceof Sortie) {
                         // Dessiner une sortie
-                        g.setColor(Color.blue);
-                        g.fillRect(X, Y, tailleCase, tailleCase);
+                        g.drawImage(imageSortie, X, Y, tailleCase, tailleCase, this);
                     } else if (caseActuelle instanceof Mur) {
                         // Dessiner un mur
-                        /*g.setColor(Color.black);
-                        g.fillRect(X, Y, tailleCase, tailleCase);*/
-                        g.drawImage(imageHall, X, Y, tailleCase, tailleCase, this);
+                        g.drawImage(imageBrique, X, Y, tailleCase, tailleCase, this);
                     } else if (caseActuelle instanceof Hall) {
-                        // Dessiner un hall avec gestion de la chaleur
                         Hall hallActuel = (Hall) caseActuelle;
-                        // Dessiner une clé si présente
-                        if (hallActuel.testCle()) {
-                            /* centrage de la clé au milieu de la case du Hall
-                            int cleX = X + (tailleCase - tailleCleLargeur) / 2;
-                            int cleY = Y + (tailleCase - tailleCleHauteur) / 2;
-                            g.setColor(Color.gray);
-                            g.fillRect(cleX, cleY, tailleCleLargeur, tailleCleHauteur);*/
-                            g.drawImage(imageCle, X, Y, tailleCase, tailleCase, this);
-                        }
-                        if (hallActuel.getChaleur() == 0) {
-                            g.drawImage(imageBrique, X, Y, tailleCase, tailleCase, this);
-                        } else {
-                            g.setColor(new Color(255, 255 - (50 + (hallActuel.getChaleur() * 10)), 255 - (50 + (hallActuel.getChaleur() * 10))));
-                            g.fillRect(X, Y, tailleCase, tailleCase);
-
-                        }
-
-
+                            int cleX = X + (tailleCase - tailleCle) / 2;
+                            int cleY = Y + (tailleCase - tailleCle) / 2;
+                            for(int i = 1; i <= 10 ; i++){
+                                if (hallActuel.getChaleur() == i) {
+                                    g.drawImage(imagesHallChaleur.get(i-1), X, Y, tailleCase, tailleCase, this);
+                                }
+                            }
+                            if(hallActuel.getChaleur() == 0) g.drawImage(imageHall, X, Y, tailleCase, tailleCase, this);
+                            if(hallActuel.testCle()) g.drawImage(imageCle, cleX, cleY, tailleCle, tailleCle, this);
                         }
                     }
                     if (caseActuelle.equals(caseJ)) {
                         // Dessiner le joueur
-                        g.setColor(Color.gray);
-                        g.fillOval(X, Y, rayonCercleJoueur, rayonCercleJoueur);
+                        g.drawImage(imageJoueur, X, Y, tailleCase, tailleCase, this);
                 }
             }
         }
     }
-
 
     public void ecranFinal(int n) {
         frame.remove(this);
@@ -160,14 +164,10 @@ public class FenetreJeu extends JPanel implements KeyListener{
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
+    public void keyTyped(KeyEvent e) {}
 
     @Override
-    public void keyPressed(KeyEvent e) {
-
-    }
+    public void keyPressed(KeyEvent e) {}
 
     public void keyReleased(KeyEvent e) {
         int keyCode = e.getKeyCode();
