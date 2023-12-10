@@ -169,6 +169,7 @@ public class FenetreJeu extends JPanel implements KeyListener{
     @Override
     public void keyPressed(KeyEvent e) {}
 
+    @Override
     public void keyReleased(KeyEvent e) {
         int keyCode = e.getKeyCode();
         switch (keyCode) {
