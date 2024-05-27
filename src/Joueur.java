@@ -1,12 +1,11 @@
-import java.awt.event.*;
-
+// classe modélisant le joueur
 public class Joueur {
-    private CaseTraversable c;
-    private int resistance;
+    private CaseTraversable position;
+    private int resistance; // PV du joueur
     private int cles;
 
     public Joueur(CaseTraversable c, int r, int k) {
-        this.c = c;
+        this.position = c;
         this.resistance = r;
         this.cles = k;
     }
@@ -16,7 +15,7 @@ public class Joueur {
     }
 
     public CaseTraversable getPos() {
-        return c;
+        return position;
     }
 
     public int getCles(){
@@ -54,7 +53,7 @@ public class Joueur {
                 else return; // stoppe la fonction bouge car le joueur se trouve en face d'une porte fermée et il n'a pas de clés
             }
 
-            c = cibleT; // et ensuite on déplace le joueur
+            position = cibleT; // et ensuite on déplace le joueur
 
         }
     }

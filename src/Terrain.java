@@ -5,6 +5,21 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Scanner;
 
+// Classe modélisant le terrain où prend place le jeu, avec des méthodes clé notamment un constructeur convertissant un fichier texte représentant un terrain, en cases correspondantes
+/* les fichiers texte doivent respecter l'encodage suivant :
+    - la première ligne contient deux entiers : hauteur[espace]largeur → ex : 12 24
+    - la seconde ligne contient également deux entiers : résistance initiale du joueur[espace]nombre de clés initial du joueur
+    - les lignes suivantes représentent le terrain avec le code suivant :
+        # : mur
+          : hall
+        x ∈ [1, 4] : flamme d'intensité x
+        + : hall contenant une clé
+        @ : porte fermée
+        . : porte ouverte
+        0 : sortie
+        H : joueur
+*/
+
 public class Terrain {
     private int hauteur, largeur;
     protected Case[][] carte;

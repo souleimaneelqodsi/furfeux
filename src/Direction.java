@@ -1,5 +1,6 @@
 import java.util.Random;
 
+// classe énumérée pour stocker les points cardinaux référentiels de déplacement
 public enum Direction {
     nord,
     sud,

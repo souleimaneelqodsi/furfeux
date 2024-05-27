@@ -1,3 +1,5 @@
+
+// classe modélisant une case de couloir/hall
 public class Hall extends CaseTraversable {
     private boolean contientCle;
 

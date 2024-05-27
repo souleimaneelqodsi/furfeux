@@ -3,9 +3,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
+// Graphique du jeu
 public class FenetreJeu extends JPanel implements KeyListener{
 
-    private Terrain terrain;
+    private final Terrain terrain;
     final  private int tailleCase = 36;
     final private int hauteur, largeur;
     final private JFrame frame;
@@ -39,13 +40,13 @@ public class FenetreJeu extends JPanel implements KeyListener{
         this.requestFocusInWindow();
 
         MediaTracker tracker = new MediaTracker(this); //priorise l'affichage des images au paintComponent
-        imageBrique = new ImageIcon("brique.png").getImage();
-        imagePorteFermee = new ImageIcon("porte_fermee.png").getImage();
-        imagePorteOuverte = new ImageIcon("porte_ouverte.png").getImage();
-        imageHall = new ImageIcon("hall.jpg").getImage();
-        imageCle = new ImageIcon("cle.png").getImage();
-        imageJoueur = new ImageIcon("perso.png").getImage();
-        imageSortie = new ImageIcon("sortie.gif").getImage();
+        imageBrique = new ImageIcon("data/brique.png").getImage();
+        imagePorteFermee = new ImageIcon("data/porte_fermee.png").getImage();
+        imagePorteOuverte = new ImageIcon("data/porte_ouverte.png").getImage();
+        imageHall = new ImageIcon("data/hall.jpg").getImage();
+        imageCle = new ImageIcon("data/cle.png").getImage();
+        imageJoueur = new ImageIcon("data/perso.png").getImage();
+        imageSortie = new ImageIcon("data/sortie.gif").getImage();
         imagesHallChaleur = new ArrayList<>();
 
         // on charge les différentes images dans un tableau d'images représentant chacune
@@ -53,15 +54,15 @@ public class FenetreJeu extends JPanel implements KeyListener{
         //contiennent les images de plus forte chaleur
 
         for(int i = 1; i <= 10; i++){
-            Image newImg = new ImageIcon(i + ".jpg").getImage();
+            Image newImg = new ImageIcon("data/"+ i + ".jpg").getImage();
             imagesHallChaleur.add(newImg);
             tracker.addImage(newImg, i + 6);
         }
 
         imagesCoeur = new ArrayList<>();
-        imagesCoeur.add(new ImageIcon("coeur.png").getImage());
-        imagesCoeur.add(new ImageIcon("demicoeur.png").getImage());
-        imagesCoeur.add(new ImageIcon("coeurmort.png").getImage());
+        imagesCoeur.add(new ImageIcon("data/coeur.png").getImage());
+        imagesCoeur.add(new ImageIcon("data/demicoeur.png").getImage());
+        imagesCoeur.add(new ImageIcon("data/coeurmort.png").getImage());
 
         tracker.addImage(imageBrique, 0);
         tracker.addImage(imagePorteFermee, 1);

@@ -1,3 +1,5 @@
+
+// classe représentant les cases traversables du jeu (sorties, portes, couloirs...)
 public class CaseTraversable extends Case {
     boolean traversable;
     int chaleur;
