@@ -3,7 +3,7 @@
 
 ## Mentions importantes
 
-Ce projet a été réalisé dans le cadre de l'unité d'enseignement [Introduction à la Programmation Objet (IPO)](https://www.lri.fr/~blsk/IPO/) du premier semestre de L2 Informatique à l'université Paris-Saclay, dont le responsable pédagogique et concepteur du sujet est [Thibaut Balabonski](https://www.lri.fr/~blsk).
+Ce projet a été réalisé **en binôme** dans le cadre de l'unité d'enseignement **[Introduction à la Programmation Objet (IPO)](https://www.lri.fr/~blsk/IPO/)** du premier semestre de **L2 Informatique à l'université Paris-Saclay**, dont le responsable pédagogique et concepteur du sujet est **[Thibaut Balabonski](https://www.lri.fr/~blsk)**.
 Toutes les images utilisées pour l'aspect graphique du jeu (portes, cœurs indiquant les PV du joueur, joueur, murs, halls...etc.) sont soit libres d'usage, soit générées par intelligence artificielle (OpenAI Dall-E) puis éditées.
 
 ## Explication du projet
